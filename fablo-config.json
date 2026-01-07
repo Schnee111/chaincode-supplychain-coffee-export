@@ -1,0 +1,58 @@
+{
+  "$schema": "https://github.com/hyperledger-labs/fablo/releases/download/1.2.0/schema.json",
+  "global": {
+    "fabricVersion": "2.2.3",
+    "tls": true,
+    "peerDevMode": false,
+    "tools": {
+      "explorer": true
+    }
+  },
+  "orgs": [
+    {
+      "organization": { "name": "Petani", "domain": "petani.co.id" },
+      "peer": { "instances": 1, "db": "LevelDb" },
+      "orderers": [{ "groupName": "orderer-group", "type": "raft", "instances": 1 }]
+    },
+    {
+      "organization": { "name": "Logistik", "domain": "logistik.co.id" },
+      "peer": { "instances": 1, "db": "LevelDb" }
+    },
+    {
+      "organization": { "name": "Koperasi", "domain": "koperasi.co.id" },
+      "peer": { "instances": 1, "db": "LevelDb" }
+    },
+    {
+      "organization": { "name": "Regulator", "domain": "regulator.co.id" },
+      "peer": { "instances": 1, "db": "LevelDb" }
+    },
+    {
+      "organization": { "name": "Importir", "domain": "importir.co.id" },
+      "peer": { "instances": 1, "db": "LevelDb" }
+    }
+  ],
+  "channels": [
+    {
+      "name": "mychannel",
+      "orgs": [
+        { "name": "Petani", "peers": ["peer0"] },
+        { "name": "Logistik", "peers": ["peer0"] },
+        { "name": "Koperasi", "peers": ["peer0"] },
+        { "name": "Regulator", "peers": ["peer0"] },
+        { "name": "Importir", "peers": ["peer0"] }
+      ]
+    }
+  ],
+  "chaincodes": [
+    {
+      "name": "kopi",
+      "version": "1.0",
+      "lang": "golang",
+      "channel": "mychannel",
+      "directory": "./kopi",
+      "endorsementPolicy": {
+        "signaturePolicy": "OutOf(3, 'PetaniMSP.peer', 'LogistikMSP.peer', 'KoperasiMSP.peer', 'RegulatorMSP.peer', 'ImportirMSP.peer')"
+      }
+    }
+  ]
+}
